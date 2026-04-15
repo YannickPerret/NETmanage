@@ -18,5 +18,9 @@ declare module '@adonisjs/inertia/types' {
     'errors/not_found': ExtractProps<(typeof import('../../inertia/pages/errors/not_found.tsx'))['default']>
     'errors/server_error': ExtractProps<(typeof import('../../inertia/pages/errors/server_error.tsx'))['default']>
     'home': ExtractProps<(typeof import('../../inertia/pages/home.tsx'))['default']>
+    'ticket_close_confirmation': ExtractProps<(typeof import('../../inertia/pages/ticket_close_confirmation.tsx'))['default']>
+    'ticket_satisfaction': ExtractProps<(typeof import('../../inertia/pages/ticket_satisfaction.tsx'))['default']>
+    'tickets': ExtractProps<(typeof import('../../inertia/pages/tickets.tsx'))['default']>
+    'satisfactions': ExtractProps<(typeof import('../../inertia/pages/satisfactions.tsx'))['default']>
   }
 }

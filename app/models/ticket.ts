@@ -1,6 +1,6 @@
 import { TicketSchema } from '#database/schema'
-import { belongsTo, manyToMany } from '@adonisjs/lucid/orm'
-import type { BelongsTo, ManyToMany } from '@adonisjs/lucid/types/relations'
+import { belongsTo, column, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import type { BelongsTo, HasMany, ManyToMany } from '@adonisjs/lucid/types/relations'
 import Status from '#models/status'
 import Priority from '#models/priority'
 import Category from '#models/category'
@@ -8,10 +8,33 @@ import Group from '#models/group'
 import User from '#models/user'
 import Company from '#models/company'
 import Attachment from '#models/attachment'
+import TicketSatisfaction from '#models/ticket_satisfaction'
+import { DateTime } from 'luxon'
 
 export type IssuerType = 'company' | 'user'
 
 export default class Ticket extends TicketSchema {
+  @column.dateTime()
+  declare resolvedAt: DateTime | null
+
+  @column.dateTime()
+  declare closedAt: DateTime | null
+
+  @column()
+  declare closeConfirmationToken: string | null
+
+  @column.dateTime()
+  declare closeConfirmationSentAt: DateTime | null
+
+  @column()
+  declare satisfactionToken: string | null
+
+  @column.dateTime()
+  declare satisfactionRequestedAt: DateTime | null
+
+  @column.dateTime()
+  declare satisfactionSubmittedAt: DateTime | null
+
   @belongsTo(() => Status)
   declare status: BelongsTo<typeof Status>
 
@@ -34,6 +57,9 @@ export default class Ticket extends TicketSchema {
     pivotTimestamps: { createdAt: 'assigned_at', updatedAt: false },
   })
   declare technicians: ManyToMany<typeof User>
+
+  @hasMany(() => TicketSatisfaction)
+  declare satisfactions: HasMany<typeof TicketSatisfaction>
 
   /**
    * Resolve the polymorphic issuer (company or user).

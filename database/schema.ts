@@ -153,6 +153,27 @@ export class StatusSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class TicketSatisfactionSchema extends BaseModel {
+  static $columns = ['comment', 'createdAt', 'id', 'rating', 'submittedByUserId', 'technicianId', 'ticketId', 'updatedAt'] as const
+  $columns = TicketSatisfactionSchema.$columns
+  @column()
+  declare comment: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare rating: number
+  @column()
+  declare submittedByUserId: number
+  @column()
+  declare technicianId: number
+  @column()
+  declare ticketId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class TicketUserSchema extends BaseModel {
   static $columns = ['assignedAt', 'id', 'ticketId', 'userId'] as const
   $columns = TicketUserSchema.$columns
@@ -167,10 +188,16 @@ export class TicketUserSchema extends BaseModel {
 }
 
 export class TicketSchema extends BaseModel {
-  static $columns = ['categoryId', 'createdAt', 'createdByUserId', 'description', 'id', 'issuerId', 'issuerType', 'priorityId', 'statusId', 'title', 'updatedAt'] as const
+  static $columns = ['categoryId', 'closeConfirmationSentAt', 'closeConfirmationToken', 'closedAt', 'createdAt', 'createdByUserId', 'description', 'id', 'issuerId', 'issuerType', 'priorityId', 'resolvedAt', 'satisfactionRequestedAt', 'satisfactionSubmittedAt', 'satisfactionToken', 'statusId', 'title', 'updatedAt'] as const
   $columns = TicketSchema.$columns
   @column()
   declare categoryId: number
+  @column.dateTime()
+  declare closeConfirmationSentAt: DateTime | null
+  @column()
+  declare closeConfirmationToken: string | null
+  @column.dateTime()
+  declare closedAt: DateTime | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
@@ -185,6 +212,14 @@ export class TicketSchema extends BaseModel {
   declare issuerType: string
   @column()
   declare priorityId: number
+  @column.dateTime()
+  declare resolvedAt: DateTime | null
+  @column.dateTime()
+  declare satisfactionRequestedAt: DateTime | null
+  @column.dateTime()
+  declare satisfactionSubmittedAt: DateTime | null
+  @column()
+  declare satisfactionToken: string | null
   @column()
   declare statusId: number
   @column()

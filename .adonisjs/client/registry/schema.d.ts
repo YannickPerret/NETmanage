@@ -19,6 +19,54 @@ export interface Registry {
       errorResponse: unknown
     }
   }
+  'tickets.confirm_close_page': {
+    methods: ["GET","HEAD"]
+    pattern: '/tickets/:id/close/confirm'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['confirmClosePage']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['confirmClosePage']>>>
+    }
+  }
+  'tickets.confirm_close': {
+    methods: ["POST"]
+    pattern: '/tickets/:id/close/confirm'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['confirmClose']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['confirmClose']>>>
+    }
+  }
+  'tickets.satisfaction_page': {
+    methods: ["GET","HEAD"]
+    pattern: '/tickets/:id/satisfaction'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['satisfactionPage']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['satisfactionPage']>>>
+    }
+  }
+  'tickets.submit_satisfaction': {
+    methods: ["POST"]
+    pattern: '/tickets/:id/satisfaction'
+    types: {
+      body: ExtractBody<InferInput<(typeof import('#validators/ticket').submitTicketSatisfactionValidator)>>
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: ExtractQuery<InferInput<(typeof import('#validators/ticket').submitTicketSatisfactionValidator)>>
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['submitSatisfaction']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['submitSatisfaction']>>> | { status: 422; response: { errors: SimpleError[] } }
+    }
+  }
   'new_account.create': {
     methods: ["GET","HEAD"]
     pattern: '/signup'
@@ -79,6 +127,30 @@ export interface Registry {
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['index']>>>
     }
   }
+  'satisfactions.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/satisfactions'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['satisfactions']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['satisfactions']>>>
+    }
+  }
+  'tickets.index': {
+    methods: ["GET","HEAD"]
+    pattern: '/tickets'
+    types: {
+      body: {}
+      paramsTuple: []
+      params: {}
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['list']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['list']>>>
+    }
+  }
   'tickets.store': {
     methods: ["POST"]
     pattern: '/tickets'
@@ -101,6 +173,18 @@ export interface Registry {
       query: {}
       response: ExtractResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['open']>>>
       errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['open']>>>
+    }
+  }
+  'tickets.resolve': {
+    methods: ["POST"]
+    pattern: '/tickets/:id/resolve'
+    types: {
+      body: {}
+      paramsTuple: [ParamValue]
+      params: { id: ParamValue }
+      query: {}
+      response: ExtractResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['resolve']>>>
+      errorResponse: ExtractErrorResponse<Awaited<ReturnType<import('#controllers/tickets_controller').default['resolve']>>>
     }
   }
   'session.destroy': {

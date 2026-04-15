@@ -1,7 +1,7 @@
 import { Data } from '@generated/data'
 import { toast, Toaster } from 'sonner'
 import { usePage } from '@inertiajs/react'
-import { ReactElement, useEffect, useState } from 'react'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import { Form, Link } from '@adonisjs/inertia/react'
 import CreateTicketModal, {
   TicketFormOptions,
@@ -13,6 +13,8 @@ type PageProps = Data.SharedProps & {
 
 export default function Layout({ children }: { children: ReactElement<PageProps> }) {
   const [modalOpen, setModalOpen] = useState(false)
+  const [userMenuOpen, setUserMenuOpen] = useState(false)
+  const userMenuRef = useRef<HTMLDivElement>(null)
   const page = usePage<PageProps>()
 
   useEffect(() => {
@@ -27,6 +29,21 @@ export default function Layout({ children }: { children: ReactElement<PageProps>
       toast.success(children.props.flash.success)
     }
   })
+
+  useEffect(() => {
+    setUserMenuOpen(false)
+  }, [page.url])
+
+  useEffect(() => {
+    function onPointerDown(event: MouseEvent) {
+      if (!userMenuRef.current?.contains(event.target as Node)) {
+        setUserMenuOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', onPointerDown)
+    return () => document.removeEventListener('mousedown', onPointerDown)
+  }, [])
 
   const isAuthed = !!children.props.user
   const options = (page.props as PageProps).options
@@ -56,6 +73,9 @@ export default function Layout({ children }: { children: ReactElement<PageProps>
                 <Link route="dashboard" className="app-nav-link">
                   Dashboard
                 </Link>
+                <Link route="tickets.index" className="app-nav-link">
+                  Tickets
+                </Link>
               </nav>
             )}
 
@@ -75,14 +95,32 @@ export default function Layout({ children }: { children: ReactElement<PageProps>
           <div className="app-header-right">
             <nav>
               {isAuthed ? (
-                <>
-                  <span className="user-initials">{children.props.user!.initials}</span>
-                  <Form route="session.destroy">
-                    <button type="submit" className="btn btn-ghost">
-                      Logout
-                    </button>
-                  </Form>
-                </>
+                <div className="user-menu" ref={userMenuRef}>
+                  <button
+                    type="button"
+                    className="user-initials user-menu-trigger"
+                    aria-haspopup="menu"
+                    aria-expanded={userMenuOpen}
+                    onClick={() => setUserMenuOpen((open) => !open)}
+                  >
+                    {children.props.user!.initials}
+                  </button>
+
+                  {userMenuOpen && (
+                    <div className="user-menu-popover" role="menu">
+                      {children.props.user?.type === 'technician' && (
+                        <Link route="satisfactions.index" className="user-menu-link" role="menuitem">
+                          Satisfaction
+                        </Link>
+                      )}
+                      <Form route="session.destroy">
+                        <button type="submit" className="user-menu-link user-menu-button" role="menuitem">
+                          Logout
+                        </button>
+                      </Form>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <>
                   <Link route="new_account.create">Signup</Link>
