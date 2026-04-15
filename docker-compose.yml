@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: netmanage-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-netmanage}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-netmanage}
+      POSTGRES_DB: ${DB_DATABASE:-netmanage}
+    ports:
+      - "5432:5432"
+    volumes:
+      - netmanage-db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-netmanage} -d ${DB_DATABASE:-netmanage}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: netmanage:latest
+    container_name: netmanage
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3333
+      NODE_ENV: production
+      DB_HOST: db
+      DB_PORT: 5432
+    ports:
+      - "3333:3333"
+    command: sh -c "node ace migration:run --force && node bin/server.js"
+
+volumes:
+  netmanage-db:
