@@ -234,3 +234,480 @@ button:hover {
     transform: scale(1);
   }
 }
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+.app-header {
+  background: #fff;
+  border-bottom: 1px solid var(--gray-3);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.app-header-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.app-header-left,
+.app-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.app-header-right nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.app-logo {
+  display: inline-flex;
+  color: var(--gray-12);
+}
+.user-initials {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--gray-3);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-10);
+}
+
+.app-nav {
+  display: flex;
+  gap: 4px;
+}
+.app-nav-link {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gray-8);
+  transition: background 0.15s, color 0.15s;
+}
+.app-nav-link:hover {
+  background: var(--gray-2);
+  color: var(--gray-12);
+}
+
+/* + New ticket button */
+.new-ticket-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 8px;
+  background: #111;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.08s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+.new-ticket-btn:hover {
+  background: #000;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
+}
+.new-ticket-btn:active {
+  transform: scale(0.97);
+}
+.new-ticket-btn .plus {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.18);
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.08s;
+  font-family: inherit;
+}
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.btn-primary {
+  background: #111;
+  color: #fff;
+}
+.btn-primary:hover:not(:disabled) {
+  background: #000;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--gray-10);
+  border-color: var(--gray-3);
+}
+.btn-ghost:hover {
+  background: var(--gray-2);
+}
+.icon-btn {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: transparent;
+  border: none;
+  color: var(--gray-8);
+  cursor: pointer;
+  font-size: 16px;
+}
+.icon-btn:hover {
+  background: var(--gray-2);
+  color: var(--gray-12);
+}
+
+/* ==========================================================================
+   Dashboard table
+   ========================================================================== */
+.dashboard {
+  max-width: 1280px;
+  margin: 24px auto;
+  padding: 0 24px;
+}
+.dashboard h1 {
+  margin-bottom: 16px;
+}
+.dashboard-section {
+  margin-bottom: 32px;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.section-header h2 {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--gray-12);
+}
+.section-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 999px;
+  background: var(--gray-3);
+  color: var(--gray-10);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tickets-table {
+  width: 100%;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--gray-3);
+  border-collapse: separate;
+  border-spacing: 0;
+}
+.tickets-table th,
+.tickets-table td {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid var(--gray-3);
+}
+.tickets-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.tickets-table thead th {
+  background: var(--gray-2);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--gray-7);
+}
+.tickets-table tbody tr:hover {
+  background: var(--gray-1);
+}
+
+/* ==========================================================================
+   Modal
+   ========================================================================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: overlay-in 0.15s ease-out;
+}
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.modal-dialog {
+  width: 80vw;
+  height: 80vh;
+  max-width: 1200px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: dialog-in 0.18s ease-out;
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--gray-3);
+}
+.modal-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+}
+.modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--gray-3);
+  background: var(--gray-1);
+}
+
+/* Form inside modal */
+.form-grid {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field.col-span-2 {
+  grid-column: span 2;
+}
+.field label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--gray-10);
+}
+.field input[type='text'],
+.field input[type='email'],
+.field input[type='password'],
+.field textarea,
+.field select {
+  padding: 10px 12px;
+  border: 1px solid var(--gray-3);
+  border-radius: 8px;
+  background: #fff;
+  font-size: 14px;
+  font-family: inherit;
+  color: var(--gray-12);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field input:focus,
+.field textarea:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--gray-8);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+.field textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+.field-error {
+  font-size: 12px;
+  color: #b91c1c;
+}
+.muted {
+  color: var(--gray-7);
+  font-size: 13px;
+}
+
+/* Chip-style multi-select */
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--gray-3);
+  border-radius: 999px;
+  font-size: 13px;
+  background: #fff;
+  color: var(--gray-10);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.15s;
+}
+.chip:hover {
+  border-color: var(--gray-6);
+}
+.chip input {
+  display: none;
+}
+.chip-active {
+  background: #111;
+  border-color: #111;
+  color: #fff;
+}
+
+/* Combobox (multi-select with search) */
+.combobox {
+  position: relative;
+}
+.combobox-input {
+  min-height: 42px;
+  padding: 4px 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  border: 1px solid var(--gray-3);
+  border-radius: 8px;
+  background: #fff;
+  cursor: text;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.combobox-input:focus-within {
+  border-color: var(--gray-8);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+.combobox-field {
+  flex: 1;
+  min-width: 120px;
+  border: none;
+  outline: none;
+  padding: 6px 4px;
+  font-size: 14px;
+  font-family: inherit;
+  background: transparent;
+  color: var(--gray-12);
+}
+.combobox-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 4px 3px 10px;
+  background: #111;
+  color: #fff;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+}
+.combobox-tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  padding: 0;
+  transition: background 0.15s;
+}
+.combobox-tag-remove:hover {
+  background: rgba(255, 255, 255, 0.32);
+}
+.combobox-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid var(--gray-3);
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-height: 220px;
+  overflow-y: auto;
+  list-style: none;
+  z-index: 10;
+  padding: 4px;
+}
+.combobox-option {
+  padding: 8px 12px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--gray-12);
+}
+.combobox-option.is-active {
+  background: var(--gray-2);
+}
+.combobox-empty {
+  padding: 12px;
+  font-size: 13px;
+  color: var(--gray-7);
+  text-align: center;
+}

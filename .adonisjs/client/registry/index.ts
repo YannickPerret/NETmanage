@@ -36,6 +36,24 @@ const routes = {
     tokens: [{"old":"/login","type":0,"val":"login","end":""}],
     types: placeholder as Registry['session.store']['types'],
   },
+  'dashboard': {
+    methods: ["GET","HEAD"],
+    pattern: '/dashboard',
+    tokens: [{"old":"/dashboard","type":0,"val":"dashboard","end":""}],
+    types: placeholder as Registry['dashboard']['types'],
+  },
+  'tickets.store': {
+    methods: ["POST"],
+    pattern: '/tickets',
+    tokens: [{"old":"/tickets","type":0,"val":"tickets","end":""}],
+    types: placeholder as Registry['tickets.store']['types'],
+  },
+  'tickets.open': {
+    methods: ["POST"],
+    pattern: '/tickets/:id/open',
+    tokens: [{"old":"/tickets/:id/open","type":0,"val":"tickets","end":""},{"old":"/tickets/:id/open","type":1,"val":"id","end":""},{"old":"/tickets/:id/open","type":0,"val":"open","end":""}],
+    types: placeholder as Registry['tickets.open']['types'],
+  },
   'session.destroy': {
     methods: ["POST"],
     pattern: '/logout',

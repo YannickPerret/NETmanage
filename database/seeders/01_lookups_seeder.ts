@@ -7,7 +7,7 @@ import Group from '#models/group'
 export default class extends BaseSeeder {
   async run() {
     await Status.updateOrCreateMany('slug', [
-      { slug: 'open', name: 'Open', color: '#3b82f6', position: 1 },
+      { slug: 'awaiting_open', name: 'Awaiting assignment', color: '#94a3b8', position: 0 },
       { slug: 'in_progress', name: 'In Progress', color: '#f59e0b', position: 2 },
       { slug: 'pending', name: 'Pending', color: '#a855f7', position: 3 },
       { slug: 'resolved', name: 'Resolved', color: '#10b981', position: 4 },

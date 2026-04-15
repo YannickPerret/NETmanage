@@ -1,13 +1,23 @@
 import { Data } from '@generated/data'
 import { toast, Toaster } from 'sonner'
 import { usePage } from '@inertiajs/react'
-import { ReactElement, useEffect } from 'react'
+import { ReactElement, useEffect, useState } from 'react'
 import { Form, Link } from '@adonisjs/inertia/react'
+import CreateTicketModal, {
+  TicketFormOptions,
+} from '../components/create_ticket_modal'
 
-export default function Layout({ children }: { children: ReactElement<Data.SharedProps> }) {
+type PageProps = Data.SharedProps & {
+  options?: TicketFormOptions
+}
+
+export default function Layout({ children }: { children: ReactElement<PageProps> }) {
+  const [modalOpen, setModalOpen] = useState(false)
+  const page = usePage<PageProps>()
+
   useEffect(() => {
     toast.dismiss()
-  }, [usePage().url])
+  }, [page.url])
 
   useEffect(() => {
     if (children.props.flash.error) {
@@ -18,15 +28,18 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
     }
   })
 
+  const isAuthed = !!children.props.user
+  const options = (page.props as PageProps).options
+
   return (
     <>
-      <header>
-        <div>
-          <div>
-            <Link route="home">
+      <header className="app-header">
+        <div className="app-header-inner">
+          <div className="app-header-left">
+            <Link route="home" className="app-logo">
               <svg
-                width="120"
-                height="24"
+                width="96"
+                height="20"
                 viewBox="0 0 195 38"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -37,14 +50,37 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
                 />
               </svg>
             </Link>
+
+            {isAuthed && (
+              <nav className="app-nav">
+                <Link route="dashboard" className="app-nav-link">
+                  Dashboard
+                </Link>
+              </nav>
+            )}
+
+            {isAuthed && options && (
+              <button
+                type="button"
+                className="new-ticket-btn"
+                onClick={() => setModalOpen(true)}
+                title="New ticket"
+                aria-label="Create a new ticket"
+              >
+                <span className="plus">+</span>
+                <span className="label">New ticket</span>
+              </button>
+            )}
           </div>
-          <div>
+          <div className="app-header-right">
             <nav>
-              {children.props.user ? (
+              {isAuthed ? (
                 <>
-                  <span>{children.props.user.initials}</span>
+                  <span className="user-initials">{children.props.user!.initials}</span>
                   <Form route="session.destroy">
-                    <button type="submit"> Logout </button>
+                    <button type="submit" className="btn btn-ghost">
+                      Logout
+                    </button>
                   </Form>
                 </>
               ) : (
@@ -59,6 +95,14 @@ export default function Layout({ children }: { children: ReactElement<Data.Share
       </header>
       <main>{children}</main>
       <Toaster position="top-center" richColors />
+
+      {options && (
+        <CreateTicketModal
+          open={modalOpen}
+          onClose={() => setModalOpen(false)}
+          options={options}
+        />
+      )}
     </>
   )
 }

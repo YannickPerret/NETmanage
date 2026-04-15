@@ -26,6 +26,8 @@ router
 router
   .group(() => {
     router.get('dashboard', [controllers.Tickets, 'index']).as('dashboard')
+    router.post('tickets', [controllers.Tickets, 'store']).as('tickets.store')
+    router.post('tickets/:id/open', [controllers.Tickets, 'open']).as('tickets.open')
     router.post('logout', [controllers.Session, 'destroy'])
   })
   .use(middleware.auth())

@@ -12,5 +12,3 @@ tmp
 .vscode
 .idea
 coverage
-tests
-.adonisjs

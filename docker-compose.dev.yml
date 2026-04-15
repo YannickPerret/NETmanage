@@ -1,0 +1,18 @@
+services:
+  app:
+    image: node:24-bookworm-slim
+    build: !reset null
+    working_dir: /app
+    command: sh -c "npm install && npm run dev"
+    environment:
+      HOST: 0.0.0.0
+      PORT: 3333
+      NODE_ENV: development
+      DB_HOST: db
+      DB_PORT: 5432
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    ports:
+      - "3333:3333"

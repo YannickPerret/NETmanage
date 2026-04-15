@@ -7,9 +7,197 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class AttachmentSchema extends BaseModel {
+  static $columns = ['attachableId', 'attachableType', 'createdAt', 'filename', 'id', 'mimeType', 'path', 'size', 'updatedAt', 'uploadedByUserId'] as const
+  $columns = AttachmentSchema.$columns
+  @column()
+  declare attachableId: number
+  @column()
+  declare attachableType: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare filename: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare mimeType: string | null
+  @column()
+  declare path: string
+  @column()
+  declare size: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare uploadedByUserId: number | null
+}
+
+export class BranchSchema extends BaseModel {
+  static $columns = ['address', 'city', 'companyId', 'country', 'createdAt', 'id', 'name', 'updatedAt'] as const
+  $columns = BranchSchema.$columns
+  @column()
+  declare address: string | null
+  @column()
+  declare city: string | null
+  @column()
+  declare companyId: number
+  @column()
+  declare country: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class CategorySchema extends BaseModel {
+  static $columns = ['createdAt', 'description', 'id', 'name', 'slug', 'updatedAt'] as const
+  $columns = CategorySchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column()
+  declare slug: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class CompanySchema extends BaseModel {
+  static $columns = ['createdAt', 'email', 'id', 'name', 'phone', 'updatedAt'] as const
+  $columns = CompanySchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare email: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column()
+  declare phone: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class GroupTicketSchema extends BaseModel {
+  static $columns = ['groupId', 'id', 'ticketId'] as const
+  $columns = GroupTicketSchema.$columns
+  @column()
+  declare groupId: number
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare ticketId: number
+}
+
+export class GroupSchema extends BaseModel {
+  static $columns = ['createdAt', 'description', 'id', 'name', 'slug', 'updatedAt'] as const
+  $columns = GroupSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column()
+  declare slug: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class PrioritySchema extends BaseModel {
+  static $columns = ['color', 'createdAt', 'id', 'level', 'name', 'slug', 'updatedAt'] as const
+  $columns = PrioritySchema.$columns
+  @column()
+  declare color: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare level: number
+  @column()
+  declare name: string
+  @column()
+  declare slug: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class StatusSchema extends BaseModel {
+  static $columns = ['color', 'createdAt', 'id', 'name', 'position', 'slug', 'updatedAt'] as const
+  $columns = StatusSchema.$columns
+  @column()
+  declare color: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare name: string
+  @column()
+  declare position: number
+  @column()
+  declare slug: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
+export class TicketUserSchema extends BaseModel {
+  static $columns = ['assignedAt', 'id', 'ticketId', 'userId'] as const
+  $columns = TicketUserSchema.$columns
+  @column.dateTime()
+  declare assignedAt: DateTime
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare ticketId: number
+  @column()
+  declare userId: number
+}
+
+export class TicketSchema extends BaseModel {
+  static $columns = ['categoryId', 'createdAt', 'createdByUserId', 'description', 'id', 'issuerId', 'issuerType', 'priorityId', 'statusId', 'title', 'updatedAt'] as const
+  $columns = TicketSchema.$columns
+  @column()
+  declare categoryId: number
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare createdByUserId: number | null
+  @column()
+  declare description: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare issuerId: number
+  @column()
+  declare issuerType: string
+  @column()
+  declare priorityId: number
+  @column()
+  declare statusId: number
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class UserSchema extends BaseModel {
-  static $columns = ['createdAt', 'email', 'fullName', 'id', 'password', 'updatedAt'] as const
+  static $columns = ['branchId', 'createdAt', 'email', 'fullName', 'id', 'password', 'role', 'type', 'updatedAt'] as const
   $columns = UserSchema.$columns
+  @column()
+  declare branchId: number | null
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime
   @column()
@@ -20,6 +208,10 @@ export class UserSchema extends BaseModel {
   declare id: number
   @column({ serializeAs: null })
   declare password: string
+  @column()
+  declare role: string | null
+  @column()
+  declare type: string
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime | null
 }

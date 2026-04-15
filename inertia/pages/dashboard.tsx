@@ -1,3 +1,5 @@
+import { router } from '@inertiajs/react'
+
 type Technician = {
   id: number
   fullName: string | null
@@ -17,72 +19,132 @@ type TicketRow = {
   technicians: Technician[]
 }
 
-export default function Dashboard({ tickets }: { tickets: TicketRow[] }) {
+function StatusBadge({ status }: { status: Status }) {
+  if (!status) return <>—</>
+  return (
+    <span
+      className="status-badge"
+      style={{
+        backgroundColor: status.color ?? '#6b7280',
+        color: '#fff',
+        padding: '2px 10px',
+        borderRadius: 999,
+        fontSize: 12,
+        fontWeight: 500,
+      }}
+    >
+      {status.name}
+    </span>
+  )
+}
+
+function TechChips({ technicians }: { technicians: Technician[] }) {
+  if (technicians.length === 0) return <span className="muted">Unassigned</span>
+  return (
+    <>
+      {technicians.map((tech) => (
+        <span
+          key={tech.id}
+          className="tech-badge"
+          title={tech.fullName ?? ''}
+          style={{
+            display: 'inline-block',
+            marginRight: 6,
+            padding: '2px 8px',
+            borderRadius: 999,
+            background: 'var(--gray-3)',
+            color: 'var(--gray-10)',
+            fontSize: 12,
+            fontWeight: 600,
+          }}
+        >
+          {tech.initials}
+        </span>
+      ))}
+    </>
+  )
+}
+
+function TicketsTable({
+  tickets,
+  emptyLabel,
+  showOpenAction = false,
+}: {
+  tickets: TicketRow[]
+  emptyLabel: string
+  showOpenAction?: boolean
+}) {
+  if (tickets.length === 0) {
+    return <p className="muted" style={{ padding: '16px 4px' }}>{emptyLabel}</p>
+  }
+  return (
+    <table className="tickets-table">
+      <thead>
+        <tr>
+          <th style={{ width: 80 }}>#</th>
+          <th style={{ width: 180 }}>Status</th>
+          <th>Title</th>
+          <th style={{ width: 220 }}>Technicians</th>
+          {showOpenAction && <th style={{ width: 100 }}></th>}
+        </tr>
+      </thead>
+      <tbody>
+        {tickets.map((t) => (
+          <tr key={t.id}>
+            <td>#{t.id}</td>
+            <td><StatusBadge status={t.status} /></td>
+            <td>{t.title}</td>
+            <td><TechChips technicians={t.technicians} /></td>
+            {showOpenAction && (
+              <td>
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  style={{ padding: '4px 12px', fontSize: 13 }}
+                  onClick={() => router.post(`/tickets/${t.id}/open`)}
+                >
+                  Open
+                </button>
+              </td>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+export default function Dashboard({
+  awaitingTickets,
+  myTickets,
+}: {
+  awaitingTickets: TicketRow[]
+  myTickets: TicketRow[]
+}) {
   return (
     <div className="dashboard">
-      <h1>Tickets</h1>
+      <section className="dashboard-section">
+        <div className="section-header">
+          <h2>Awaiting assignment</h2>
+          <span className="section-count">{awaitingTickets.length}</span>
+        </div>
+        <TicketsTable
+          tickets={awaitingTickets}
+          emptyLabel="No ticket awaiting assignment."
+          showOpenAction
+        />
+      </section>
 
-      {tickets.length === 0 ? (
-        <p>Aucun ticket pour le moment.</p>
-      ) : (
-        <table className="tickets-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>État</th>
-              <th>Titre</th>
-              <th>Techniciens</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tickets.map((t) => (
-              <tr key={t.id}>
-                <td>#{t.id}</td>
-                <td>
-                  {t.status ? (
-                    <span
-                      className="status-badge"
-                      style={{
-                        backgroundColor: t.status.color ?? '#6b7280',
-                        color: '#fff',
-                        padding: '2px 8px',
-                        borderRadius: 999,
-                        fontSize: 12,
-                      }}
-                    >
-                      {t.status.name}
-                    </span>
-                  ) : (
-                    '—'
-                  )}
-                </td>
-                <td>{t.title}</td>
-                <td>
-                  {t.technicians.length === 0
-                    ? '—'
-                    : t.technicians.map((tech) => (
-                        <span
-                          key={tech.id}
-                          className="tech-badge"
-                          title={tech.fullName ?? ''}
-                          style={{
-                            display: 'inline-block',
-                            marginRight: 6,
-                            padding: '2px 6px',
-                            borderRadius: 999,
-                            background: '#e5e7eb',
-                            fontSize: 12,
-                          }}
-                        >
-                          {tech.initials}
-                        </span>
-                      ))}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <section className="dashboard-section">
+        <div className="section-header">
+          <h2>My tickets</h2>
+          <span className="section-count">{myTickets.length}</span>
+        </div>
+        <TicketsTable
+          tickets={myTickets}
+          emptyLabel="You are not assigned to any ticket yet."
+        />
+      </section>
     </div>
   )
 }
