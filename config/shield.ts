@@ -36,7 +36,7 @@ const shieldConfig = defineConfig({
      * Route patterns to exclude from CSRF checks.
      * Useful for external webhooks or API endpoints.
      */
-    exceptRoutes: [],
+    exceptRoutes: ['/webhooks/m365/notifications'],
 
     /**
      * Expose an encrypted XSRF-TOKEN cookie for frontend HTTP clients.

@@ -7,4 +7,7 @@ export const controllers = {
   NewAccount: () => import('#controllers/new_account_controller'),
   Session: () => import('#controllers/session_controller'),
   Tickets: () => import('#controllers/tickets_controller'),
+  MailServices: () => import('#controllers/mail_services_controller'),
+  Companies: () => import('#controllers/companies_controller'),
+  Announcements: () => import('#controllers/announcements_controller'),
 }

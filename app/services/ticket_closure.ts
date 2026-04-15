@@ -6,6 +6,11 @@ import {
   sendTicketClosureConfirmationRequest,
   sendTicketClosedSatisfactionRequest,
 } from '#services/ticket_mailer'
+import {
+  logTicketClosed,
+  logTicketResolved,
+  logTicketSatisfaction,
+} from '#services/ticket_events'
 import { broadcastTicketState, loadRealtimeTicket } from '#services/ticket_realtime'
 import { DateTime } from 'luxon'
 import { randomBytes } from 'node:crypto'
@@ -17,7 +22,7 @@ function generateToken() {
   return randomBytes(24).toString('hex')
 }
 
-async function closeTicketInternal(ticket: Ticket, client: User | null) {
+async function closeTicketInternal(ticket: Ticket, client: User | null, actor: User | null, mode: 'client' | 'auto') {
   const closedStatus = await Status.findByOrFail('slug', CLOSED_SLUG)
 
   ticket.statusId = closedStatus.id
@@ -29,13 +34,14 @@ async function closeTicketInternal(ticket: Ticket, client: User | null) {
 
   const realtimeTicket = await loadRealtimeTicket(ticket)
   broadcastTicketState(ticket, realtimeTicket)
+  await logTicketClosed(ticket, actor, mode)
 
   if (client) {
     await sendTicketClosedSatisfactionRequest(ticket, client)
   }
 }
 
-export async function markTicketResolved(ticket: Ticket, client: User | null) {
+export async function markTicketResolved(ticket: Ticket, client: User | null, actor: User) {
   const resolvedStatus = await Status.findByOrFail('slug', RESOLVED_SLUG)
 
   ticket.statusId = resolvedStatus.id
@@ -50,18 +56,19 @@ export async function markTicketResolved(ticket: Ticket, client: User | null) {
 
   const realtimeTicket = await loadRealtimeTicket(ticket)
   broadcastTicketState(ticket, realtimeTicket)
+  await logTicketResolved(ticket, actor)
 
   if (client) {
     await sendTicketClosureConfirmationRequest(ticket, client)
   }
 }
 
-export async function closeTicketAfterClientConfirmation(ticket: Ticket, client: User | null) {
-  await closeTicketInternal(ticket, client)
+export async function closeTicketAfterClientConfirmation(ticket: Ticket, client: User | null, actor: User | null) {
+  await closeTicketInternal(ticket, client, actor, 'client')
 }
 
 export async function autoCloseTicket(ticket: Ticket, client: User | null) {
-  await closeTicketInternal(ticket, client)
+  await closeTicketInternal(ticket, client, null, 'auto')
 }
 
 export async function submitTicketSatisfaction(
@@ -97,6 +104,7 @@ export async function submitTicketSatisfaction(
   ticket.satisfactionToken = null
   ticket.satisfactionSubmittedAt = DateTime.utc()
   await ticket.save()
+  await logTicketSatisfaction(ticket, client, payload.rating)
 }
 
 export function isAutoCloseDue(ticket: Ticket) {

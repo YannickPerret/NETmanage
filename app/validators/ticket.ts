@@ -13,3 +13,7 @@ export const submitTicketSatisfactionValidator = vine.create({
   rating: vine.number().min(1).max(5),
   comment: vine.string().trim().maxLength(2000).optional(),
 })
+
+export const updateTicketParentValidator = vine.create({
+  parentTicketId: vine.number().positive(),
+})

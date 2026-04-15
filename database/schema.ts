@@ -7,6 +7,33 @@
 import { BaseModel, column } from '@adonisjs/lucid/orm'
 import { DateTime } from 'luxon'
 
+export class AnnouncementSchema extends BaseModel {
+  static $columns = ['body', 'createdAt', 'createdByUserId', 'endsAt', 'id', 'isActive', 'position', 'startsAt', 'title', 'updatedAt', 'variant'] as const
+  $columns = AnnouncementSchema.$columns
+  @column()
+  declare body: string
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare createdByUserId: number | null
+  @column.dateTime()
+  declare endsAt: DateTime | null
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isActive: boolean
+  @column()
+  declare position: number
+  @column.dateTime()
+  declare startsAt: DateTime | null
+  @column()
+  declare title: string
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare variant: string
+}
+
 export class AttachmentSchema extends BaseModel {
   static $columns = ['attachableId', 'attachableType', 'createdAt', 'filename', 'id', 'mimeType', 'path', 'size', 'updatedAt', 'uploadedByUserId'] as const
   $columns = AttachmentSchema.$columns
@@ -115,6 +142,105 @@ export class GroupSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class MailServiceAccountSchema extends BaseModel {
+  static $columns = ['accessToken', 'connectedByUserId', 'createdAt', 'displayName', 'email', 'id', 'lastError', 'lastSyncedAt', 'microsoftTenantId', 'microsoftUserId', 'provider', 'refreshToken', 'scopes', 'tokenExpiresAt', 'updatedAt', 'webhookClientState'] as const
+  $columns = MailServiceAccountSchema.$columns
+  @column()
+  declare accessToken: string
+  @column()
+  declare connectedByUserId: number | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare displayName: string | null
+  @column()
+  declare email: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare lastError: string | null
+  @column.dateTime()
+  declare lastSyncedAt: DateTime | null
+  @column()
+  declare microsoftTenantId: string
+  @column()
+  declare microsoftUserId: string
+  @column()
+  declare provider: string
+  @column()
+  declare refreshToken: string
+  @column()
+  declare scopes: string | null
+  @column.dateTime()
+  declare tokenExpiresAt: DateTime | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare webhookClientState: string
+}
+
+export class MailServiceFolderSchema extends BaseModel {
+  static $columns = ['createdAt', 'deltaLink', 'displayName', 'graphFolderId', 'id', 'isEnabled', 'lastError', 'lastSyncedAt', 'mailServiceAccountId', 'parentGraphFolderId', 'subscriptionExpiresAt', 'subscriptionId', 'updatedAt', 'wellKnownName'] as const
+  $columns = MailServiceFolderSchema.$columns
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare deltaLink: string | null
+  @column()
+  declare displayName: string
+  @column()
+  declare graphFolderId: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare isEnabled: boolean
+  @column()
+  declare lastError: string | null
+  @column.dateTime()
+  declare lastSyncedAt: DateTime | null
+  @column()
+  declare mailServiceAccountId: number
+  @column()
+  declare parentGraphFolderId: string | null
+  @column.dateTime()
+  declare subscriptionExpiresAt: DateTime | null
+  @column()
+  declare subscriptionId: string | null
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+  @column()
+  declare wellKnownName: string | null
+}
+
+export class MailServiceMessageSchema extends BaseModel {
+  static $columns = ['conversationId', 'createdAt', 'graphMessageId', 'id', 'internetMessageId', 'mailServiceAccountId', 'mailServiceFolderId', 'receivedAt', 'senderEmail', 'subject', 'ticketId', 'updatedAt'] as const
+  $columns = MailServiceMessageSchema.$columns
+  @column()
+  declare conversationId: string | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare graphMessageId: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare internetMessageId: string | null
+  @column()
+  declare mailServiceAccountId: number
+  @column()
+  declare mailServiceFolderId: number | null
+  @column.dateTime()
+  declare receivedAt: DateTime | null
+  @column()
+  declare senderEmail: string | null
+  @column()
+  declare subject: string | null
+  @column()
+  declare ticketId: number
+  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  declare updatedAt: DateTime | null
+}
+
 export class PrioritySchema extends BaseModel {
   static $columns = ['color', 'createdAt', 'id', 'level', 'name', 'slug', 'updatedAt'] as const
   $columns = PrioritySchema.$columns
@@ -153,6 +279,25 @@ export class StatusSchema extends BaseModel {
   declare updatedAt: DateTime | null
 }
 
+export class TicketEventSchema extends BaseModel {
+  static $columns = ['actorUserId', 'createdAt', 'description', 'eventType', 'id', 'metadata', 'ticketId'] as const
+  $columns = TicketEventSchema.$columns
+  @column()
+  declare actorUserId: number | null
+  @column.dateTime({ autoCreate: true })
+  declare createdAt: DateTime
+  @column()
+  declare description: string
+  @column()
+  declare eventType: string
+  @column({ isPrimary: true })
+  declare id: number
+  @column()
+  declare metadata: any | null
+  @column()
+  declare ticketId: number
+}
+
 export class TicketSatisfactionSchema extends BaseModel {
   static $columns = ['comment', 'createdAt', 'id', 'rating', 'submittedByUserId', 'technicianId', 'ticketId', 'updatedAt'] as const
   $columns = TicketSatisfactionSchema.$columns
@@ -188,7 +333,7 @@ export class TicketUserSchema extends BaseModel {
 }
 
 export class TicketSchema extends BaseModel {
-  static $columns = ['categoryId', 'closeConfirmationSentAt', 'closeConfirmationToken', 'closedAt', 'createdAt', 'createdByUserId', 'description', 'id', 'issuerId', 'issuerType', 'priorityId', 'resolvedAt', 'satisfactionRequestedAt', 'satisfactionSubmittedAt', 'satisfactionToken', 'statusId', 'title', 'updatedAt'] as const
+  static $columns = ['categoryId', 'closeConfirmationSentAt', 'closeConfirmationToken', 'closedAt', 'createdAt', 'createdByUserId', 'description', 'id', 'issuerId', 'issuerType', 'parentTicketId', 'priorityId', 'resolvedAt', 'satisfactionRequestedAt', 'satisfactionSubmittedAt', 'satisfactionToken', 'statusId', 'title', 'updatedAt'] as const
   $columns = TicketSchema.$columns
   @column()
   declare categoryId: number
@@ -210,6 +355,8 @@ export class TicketSchema extends BaseModel {
   declare issuerId: number
   @column()
   declare issuerType: string
+  @column()
+  declare parentTicketId: number | null
   @column()
   declare priorityId: number
   @column.dateTime()

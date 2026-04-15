@@ -12,6 +12,7 @@ export const USER_TICKETS_INDEX_CHANNEL_PATTERN = 'users/:id/tickets/index'
 export type SerializedTicket = {
   id: number
   title: string
+  description: string | null
   createdAt: string
   createdBy: {
     id: number | null
@@ -22,6 +23,20 @@ export type SerializedTicket = {
     slug: string
     name: string
     color: string | null
+  } | null
+  priority: {
+    slug: string
+    name: string
+    level: number
+    color: string | null
+  } | null
+  category: {
+    slug: string
+    name: string
+  } | null
+  company: {
+    id: number
+    name: string
   } | null
   technicians: Array<{
     id: number
@@ -51,9 +66,12 @@ export function ticketChannel(ticketId: number) {
 }
 
 export function serializeTicket(ticket: Ticket): SerializedTicket {
+  const branchCompany = ticket.creator?.branch?.company ?? null
+
   return {
     id: ticket.id,
     title: ticket.title,
+    description: ticket.description ?? null,
     createdAt: ticket.createdAt.toISO() ?? ticket.createdAt.toSQL() ?? '',
     createdBy: {
       id: ticket.creator?.id ?? null,
@@ -62,6 +80,20 @@ export function serializeTicket(ticket: Ticket): SerializedTicket {
     },
     status: ticket.status
       ? { slug: ticket.status.slug, name: ticket.status.name, color: ticket.status.color }
+      : null,
+    priority: ticket.priority
+      ? {
+          slug: ticket.priority.slug,
+          name: ticket.priority.name,
+          level: ticket.priority.level,
+          color: ticket.priority.color,
+        }
+      : null,
+    category: ticket.category
+      ? { slug: ticket.category.slug, name: ticket.category.name }
+      : null,
+    company: branchCompany
+      ? { id: branchCompany.id, name: branchCompany.name }
       : null,
     technicians: ticket.technicians.map((user) => ({
       id: user.id,
@@ -73,8 +105,14 @@ export function serializeTicket(ticket: Ticket): SerializedTicket {
 
 export async function loadRealtimeTicket(ticket: Ticket) {
   await ticket.load('status')
+  await ticket.load('priority')
+  await ticket.load('category')
   await ticket.load('technicians', (query) => query.select('id', 'full_name', 'email'))
-  await ticket.load('creator', (query) => query.select('id', 'full_name', 'email'))
+  await ticket.load('creator', (query) => {
+    query.select('id', 'full_name', 'email', 'branch_id').preload('branch', (branchQuery) => {
+      branchQuery.preload('company')
+    })
+  })
 
   return serializeTicket(ticket)
 }

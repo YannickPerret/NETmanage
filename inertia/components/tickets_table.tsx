@@ -1,5 +1,7 @@
 import type { ReactNode } from 'react'
 import { DateTime } from 'luxon'
+import { Link } from '@adonisjs/inertia/react'
+import DataTable, { type DataTableColumn } from './data_table'
 
 export type Technician = {
   id: number
@@ -16,6 +18,7 @@ export type Status = {
 export type TicketRow = {
   id: number
   title: string
+  description?: string | null
   createdAt: string
   createdBy: {
     id: number | null
@@ -23,6 +26,20 @@ export type TicketRow = {
     email: string | null
   }
   status: Status
+  priority?: {
+    slug: string
+    name: string
+    level: number
+    color: string | null
+  } | null
+  category?: {
+    slug: string
+    name: string
+  } | null
+  company?: {
+    id: number
+    name: string
+  } | null
   technicians: Technician[]
 }
 
@@ -90,37 +107,55 @@ export default function TicketsTable({
   emptyLabel: string
   renderActions?: (ticket: TicketRow) => ReactNode
 }) {
-  if (tickets.length === 0) {
-    return <p className="muted" style={{ padding: '16px 4px' }}>{emptyLabel}</p>
+  const columns: DataTableColumn<TicketRow>[] = [
+    {
+      key: 'id',
+      header: '#',
+      width: 80,
+      render: (ticket) => `#${ticket.id}`,
+    },
+    {
+      key: 'status',
+      header: 'Status',
+      width: 180,
+      render: (ticket) => <StatusBadge status={ticket.status} />,
+    },
+    {
+      key: 'title',
+      header: 'Title',
+      render: (ticket) => (
+        <div className="ticket-title-cell">
+          <Link href={`/tickets/${ticket.id}`} className="ticket-title-link">
+            {ticket.title}
+          </Link>
+          <span className="ticket-meta">{formatTicketMeta(ticket)}</span>
+        </div>
+      ),
+    },
+    {
+      key: 'technicians',
+      header: 'Technicians',
+      width: 220,
+      render: (ticket) => <TechChips technicians={ticket.technicians} />,
+    },
+  ]
+
+  if (renderActions) {
+    columns.push({
+      key: 'actions',
+      header: '',
+      width: 180,
+      render: (ticket) => renderActions(ticket),
+    })
   }
 
   return (
-    <table className="tickets-table">
-      <thead>
-        <tr>
-          <th style={{ width: 80 }}>#</th>
-          <th style={{ width: 180 }}>Status</th>
-          <th>Title</th>
-          <th style={{ width: 220 }}>Technicians</th>
-          {renderActions && <th style={{ width: 180 }}></th>}
-        </tr>
-      </thead>
-      <tbody>
-        {tickets.map((ticket) => (
-          <tr key={ticket.id} id={`ticket-${ticket.id}`}>
-            <td>#{ticket.id}</td>
-            <td><StatusBadge status={ticket.status} /></td>
-            <td>
-              <div className="ticket-title-cell">
-                <span>{ticket.title}</span>
-                <span className="ticket-meta">{formatTicketMeta(ticket)}</span>
-              </div>
-            </td>
-            <td><TechChips technicians={ticket.technicians} /></td>
-            {renderActions && <td>{renderActions(ticket)}</td>}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <DataTable
+      rows={tickets}
+      columns={columns}
+      emptyLabel={emptyLabel}
+      getRowKey={(ticket) => ticket.id}
+      getRowId={(ticket) => `ticket-${ticket.id}`}
+    />
   )
 }

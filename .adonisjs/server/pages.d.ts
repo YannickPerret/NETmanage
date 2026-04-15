@@ -22,5 +22,10 @@ declare module '@adonisjs/inertia/types' {
     'ticket_satisfaction': ExtractProps<(typeof import('../../inertia/pages/ticket_satisfaction.tsx'))['default']>
     'tickets': ExtractProps<(typeof import('../../inertia/pages/tickets.tsx'))['default']>
     'satisfactions': ExtractProps<(typeof import('../../inertia/pages/satisfactions.tsx'))['default']>
+    'admin/service_mail': ExtractProps<(typeof import('../../inertia/pages/admin/service_mail.tsx'))['default']>
+    'companies': ExtractProps<(typeof import('../../inertia/pages/companies.tsx'))['default']>
+    'companies/show': ExtractProps<(typeof import('../../inertia/pages/companies/show.tsx'))['default']>
+    'tickets/show': ExtractProps<(typeof import('../../inertia/pages/tickets/show.tsx'))['default']>
+    'admin/announcements': ExtractProps<(typeof import('../../inertia/pages/admin/announcements.tsx'))['default']>
   }
 }

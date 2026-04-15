@@ -9,11 +9,15 @@ import User from '#models/user'
 import Company from '#models/company'
 import Attachment from '#models/attachment'
 import TicketSatisfaction from '#models/ticket_satisfaction'
+import TicketEvent from '#models/ticket_event'
 import { DateTime } from 'luxon'
 
 export type IssuerType = 'company' | 'user'
 
 export default class Ticket extends TicketSchema {
+  @column()
+  declare parentTicketId: number | null
+
   @column.dateTime()
   declare resolvedAt: DateTime | null
 
@@ -47,6 +51,9 @@ export default class Ticket extends TicketSchema {
   @belongsTo(() => User, { foreignKey: 'createdByUserId' })
   declare creator: BelongsTo<typeof User>
 
+  @belongsTo(() => Ticket, { foreignKey: 'parentTicketId' })
+  declare parentTicket: BelongsTo<typeof Ticket>
+
   @manyToMany(() => Group, {
     pivotTable: 'group_ticket',
   })
@@ -60,6 +67,12 @@ export default class Ticket extends TicketSchema {
 
   @hasMany(() => TicketSatisfaction)
   declare satisfactions: HasMany<typeof TicketSatisfaction>
+
+  @hasMany(() => Ticket, { foreignKey: 'parentTicketId' })
+  declare childTickets: HasMany<typeof Ticket>
+
+  @hasMany(() => TicketEvent)
+  declare events: HasMany<typeof TicketEvent>
 
   /**
    * Resolve the polymorphic issuer (company or user).

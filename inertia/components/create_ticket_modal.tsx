@@ -9,6 +9,8 @@ export type TicketFormOptions = {
   categories: Option[]
   groups: Option[]
   technicians: TechnicianOption[]
+  statuses?: Option[]
+  companies?: Option[]
 }
 
 export default function CreateTicketModal({

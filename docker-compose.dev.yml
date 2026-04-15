@@ -61,7 +61,8 @@ services:
         fi;
         while true; do
           node ace tickets:auto-close;
-          sleep 3600;
+          node ace mail-services:sync;
+          sleep 300;
         done
       '
     environment:

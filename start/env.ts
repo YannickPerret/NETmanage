@@ -41,4 +41,11 @@ export default await Env.create(new URL('../', import.meta.url), {
   SMTP_PORT: Env.schema.number.optional(),
   SMTP_USERNAME: Env.schema.string.optional(),
   SMTP_PASSWORD: Env.schema.string.optional(),
+
+  // Microsoft 365
+  M365_TENANT_ID: Env.schema.string.optional(),
+  M365_CLIENT_ID: Env.schema.string.optional(),
+  M365_CLIENT_SECRET: Env.schema.string.optional(),
+  M365_REDIRECT_URI: Env.schema.string.optional(),
+  M365_GRAPH_WEBHOOK_URL: Env.schema.string.optional(),
 })
